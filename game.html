@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number Game</title>
+    <link rel="icon" href="https://o.remove.bg/downloads/41e8b9b3-ee32-4650-85f6-ce347fef0a05/image-removebg-preview.png" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .user-icon {
+            width: 40px;
+            height: 40px;
+            background-image: url('https://o.remove.bg/downloads/976b9e6b-4434-4a72-bc10-53b9c4618e3d/images-removebg-preview.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            padding: 5px;
+            margin-right: 10px;
+            text-align: center;
+            border-radius: 5px;
+            width: 80px;
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background-color: #333;
+            color: #fff;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #message {
+            font-weight: bold;
+        }
+
+        @keyframes animatedBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Display "Logged in as" information -->
+    <div class="user-info">
+        <div class="user-icon"></div>
+        <div class="username" id="username">${username}</div>
+    </div>
+
+    <div class="container">
+        <h1>Guess the Number Game</h1>
+        <p>Guess a number between 1 and 100:</p>
+        <input type="number" id="userGuess" min="1" max="100">
+        <button onclick="checkGuess()">Submit</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // Get the username from the query parameter in the URL
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const username = urlParams.get('username');
+
+
+        // Display the username
+        const usernameElement = document.getElementById("username");
+        if (username) {
+            usernameElement.textContent = `Logged in as: ${username}`;
+        }
+
+        // Generate a random number between 1 and 100
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+
+        // Function to process the user's guess
+        function checkGuess() {
+            const userGuess = parseInt(document.getElementById("userGuess").value);
+
+            if (isNaN(userGuess)) {
+                document.getElementById("message").textContent = "Please enter a valid number.";
+            } else {
+                attempts++;
+
+                if (userGuess === randomNumber) {
+                    document.getElementById("message").textContent = `Congratulations! You guessed the number ${randomNumber} in ${attempts} attempts. Please refresh to try again.`;
+                } else if (userGuess < randomNumber) {
+                    document.getElementById("message").textContent = "Try again! The number is higher.";
+                } else {
+                    document.getElementById("message").textContent = "Try again! The number is lower.";
+                }
+            }
+        }
+
+        // Add event listener to input field for "keyup" event
+        document.getElementById("userGuess").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                checkGuess();
+            }
+        });
+    </script>
+</body>
+</html>
